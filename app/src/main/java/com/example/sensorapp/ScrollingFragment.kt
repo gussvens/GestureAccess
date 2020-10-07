@@ -87,7 +87,10 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                 textFields[i].text = newText
             }
 
-            updateBackground()
+            if(values[0] > 10 || values[1] > 10 || values[2] > 10) {
+                binding.scrollView.setBackgroundColor(Color.GREEN)
+            } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
+            //updateBackground()
         }
     }
 
@@ -102,20 +105,21 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private val thresholdGZ = 2
 
     private fun updateBackground(){
-        if(gyroValues.size < numsToCheck-1 || accelerometerValues.size < numsToCheck-1) return
+        if(gyroValues.size < numsToCheck || accelerometerValues.size < numsToCheck) return
 
-        if(anyOver(thresholdAX, accelerometerValues[0].subList(0,numsToCheck)) &&
-            anyOver(thresholdGX, gyroValues[0].subList(0,numsToCheck)) &&
-            anyOver(thresholdAY, accelerometerValues[1].subList(0,numsToCheck)) &&
-            anyOver(thresholdGY, gyroValues[1].subList(0,numsToCheck)) &&
-            anyOver(thresholdAZ, accelerometerValues[2].subList(0,numsToCheck)) &&
-            anyOver(thresholdGZ, gyroValues[2].subList(0,numsToCheck))) {
+        for(i in 0..numsToCheck-1) if(xyzOver(thresholdAX, thresholdAY, thresholdAZ, accelerometerValues) && xyzOver(thresholdGX, thresholdGY, thresholdGZ, gyroValues)) {
+
+        /*if(anyOver(thresholdAX, accelerometerValues[0].subList(0,numsToCheck-1)) &&
+            anyOver(thresholdGX, gyroValues[0].subList(0,numsToCheck-1)) &&
+            anyOver(thresholdAY, accelerometerValues[1].subList(0,numsToCheck-1)) &&
+            anyOver(thresholdGY, gyroValues[1].subList(0,numsToCheck-1)) &&
+            anyOver(thresholdAZ, accelerometerValues[2].subList(0,numsToCheck-1)) &&
+            anyOver(thresholdGZ, gyroValues[2].subList(0,numsToCheck-1))) {*/
             binding.scrollView.setBackgroundColor(Color.GREEN)
         } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
     }
 
-    private fun anyOver(threshold: Int, list: List<Int>): Boolean {
-        for(i in list) if (i>=threshold) return true
+    private fun xyzOver(thresholdX: Int, thresholdY: Int, thresholdZ: Int, list: List<List<Int>>): Boolean {
         return false
     }
 
