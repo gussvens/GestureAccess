@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,18 +17,28 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentScollingBinding
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
+private const val WORK_THRESHOLD = 10000
 
 class ScrollingFragment : Fragment(), SensorEventListener {
 
     private lateinit var binding: FragmentScollingBinding
     private lateinit var mSensorManager : SensorManager
     private lateinit var textFields: MutableList<TextView>
-
     private var mAccelerometer : Sensor?= null
+
     private var mGyroscope : Sensor?= null
     private var resume = false
+
+    /*private var lastUpdate = Long.MIN_VALUE
+    private var last_x: Int = 0
+    private var last_y: Int = 0
+    private var last_z: Float = 0.0f*/
+
+    private var accumulatedWork: Int = 0
+    private var isLaunching: Boolean = false
 
     private var newGyroValue: MutableList<Int> = mutableListOf(0, 0, 0)
     private var newAccelerometerValue: MutableList<Int> = mutableListOf(0, 0, 0)
@@ -35,9 +46,9 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private var accelerometerValues= mutableListOf<MutableList<Int>>()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scolling, container, false)
 
@@ -48,13 +59,15 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             //binding.iconLayout.visibility = View.GONE
             binding.promptLayout.visibility = View.VISIBLE
             resume = true
-            val timer = object: CountDownTimer(15000, 1000) {
+            val timer = object: CountDownTimer(5000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     //TODO
                 }
                 override fun onFinish() {
                     binding.promptLayout.visibility = View.GONE
+                    accumulatedWork = 0
                     resume = false
+                    isLaunching = false
                 }
             }
             timer.start()
@@ -97,6 +110,12 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                         newAccelerometerValue[i] = v
                     }
                     accelerometerValues.add(values)
+
+                    accumulatedWork += (
+                               abs(event.values[0])
+                             + abs(event.values[1])
+                             + abs(event.values[2])
+                            ).toInt()
                 }
                 Sensor.TYPE_GYROSCOPE -> {
                     for (i in 0..newGyroValue.size - 1) { //expected is 0..2
@@ -117,8 +136,34 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                 binding.scrollView.setBackgroundColor(Color.GREEN)
             } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
             //updateBackground()
-            launchIfShaken()
+
+            Log.d("WORK", "Work: ${accumulatedWork}")
+            if(accumulatedWork > WORK_THRESHOLD && !isLaunching) {
+                isLaunching = true
+                launchApp()
+            }
         }
+
+        /*if (event != null && event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val curTime = System.currentTimeMillis()
+            // only allow one update every 100ms.
+            if (curTime - lastUpdate > 100) {
+                val diffTime: Long = curTime - lastUpdate
+                lastUpdate = curTime
+                val x = event.values[SensorManager.DATA_X].toInt()
+                val y = event.values[SensorManager.DATA_Y].toInt()
+                val z = event.values[SensorManager.DATA_Z]
+                val speed: Float = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000
+                Log.d("sensor", "shake detected w/ speed: $speed")
+                if (speed > SHAKE_THRESHOLD) {
+                    launchIfShaken()
+                    //Toast.makeText(this, "shake detected w/ speed: $speed", Toast.LENGTH_SHORT).show()
+                }
+                last_x = x
+                last_y = y
+                last_z = z
+            }
+        }*/
     }
 
     //Number of values to check
@@ -131,9 +176,8 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private val thresholdAZ = 2
     private val thresholdGZ = 2
 
-    private fun launchIfShaken(){
-
-        launchApp("com.facebook.katana")
+    private fun launchApp(){
+        launchApp("com.google.android.gm")
         binding.whiteBox.setBackgroundColor(Color.GREEN)
     }
 
@@ -141,11 +185,11 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if(gyroValues.size < numsToCheck || accelerometerValues.size < numsToCheck) return
 
         for(i in 0..numsToCheck-1) if(xyzOver(
-                thresholdAX,
-                thresholdAY,
-                thresholdAZ,
-                accelerometerValues
-            ) && xyzOver(thresholdGX, thresholdGY, thresholdGZ, gyroValues)) {
+                        thresholdAX,
+                        thresholdAY,
+                        thresholdAZ,
+                        accelerometerValues
+                ) && xyzOver(thresholdGX, thresholdGY, thresholdGZ, gyroValues)) {
             binding.scrollView.setBackgroundColor(Color.GREEN)
         } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
     }
