@@ -15,62 +15,62 @@
             android:visibility="visible">
 
             <ImageView
-                android:id="@+id/app0_button"
+                android:id="@+id/facebook_button"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:padding="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView8"
+                app:layout_constraintEnd_toStartOf="@+id/gmail_button"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/facebook_icon" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/gmail_button"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:padding="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView9"
+                app:layout_constraintEnd_toStartOf="@+id/chrome_button"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/app0_button"
-                app:layout_constraintTop_toTopOf="@+id/app0_button"
-                app:srcCompat="@drawable/facebook_icon" />
+                app:layout_constraintStart_toEndOf="@+id/facebook_button"
+                app:layout_constraintTop_toTopOf="@+id/facebook_button"
+                app:srcCompat="@drawable/gmail_icon" />
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/chrome_button"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:padding="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView10"
+                app:layout_constraintEnd_toStartOf="@+id/twitter_button"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
-                app:layout_constraintTop_toTopOf="@+id/imageView8"
-                app:srcCompat="@drawable/facebook_icon" />
+                app:layout_constraintStart_toEndOf="@+id/gmail_button"
+                app:layout_constraintTop_toTopOf="@+id/gmail_button"
+                app:srcCompat="@drawable/google_chrome_icon" />
 
             <ImageView
-                android:id="@+id/imageView10"
+                android:id="@+id/twitter_button"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:padding="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView11"
+                app:layout_constraintEnd_toStartOf="@+id/canvas_button"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView9"
-                app:layout_constraintTop_toTopOf="@+id/imageView9"
-                app:srcCompat="@drawable/facebook_icon" />
+                app:layout_constraintStart_toEndOf="@+id/chrome_button"
+                app:layout_constraintTop_toTopOf="@+id/chrome_button"
+                app:srcCompat="@drawable/twitter_icon" />
 
             <ImageView
-                android:id="@+id/imageView11"
+                android:id="@+id/canvas_button"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:layout_marginEnd="16dp"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView10"
-                app:layout_constraintTop_toTopOf="@+id/imageView10"
-                app:srcCompat="@drawable/facebook_icon" />
+                app:layout_constraintStart_toEndOf="@+id/twitter_button"
+                app:layout_constraintTop_toTopOf="@+id/twitter_button"
+                app:srcCompat="@drawable/canvas_icon" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/prompt_layout"
