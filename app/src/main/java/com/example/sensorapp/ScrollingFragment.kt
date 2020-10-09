@@ -1,18 +1,23 @@
 package com.example.sensorapp
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.*
+import android.os.CountDownTimer
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentScollingBinding
 import kotlin.math.roundToInt
+
 
 class ScrollingFragment : Fragment(), SensorEventListener {
 
@@ -24,16 +29,37 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private var mGyroscope : Sensor?= null
     private var resume = false
 
-    private var newGyroValue: MutableList<Int> = mutableListOf(0,0,0)
-    private var newAccelerometerValue: MutableList<Int> = mutableListOf(0,0,0)
+    private var newGyroValue: MutableList<Int> = mutableListOf(0, 0, 0)
+    private var newAccelerometerValue: MutableList<Int> = mutableListOf(0, 0, 0)
     private var gyroValues = mutableListOf<MutableList<Int>>()
     private var accelerometerValues= mutableListOf<MutableList<Int>>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scolling, container, false)
 
         binding.startStopButton.setOnClickListener { view: View -> resume = !resume }
         binding.clearButton.setOnClickListener { view: View -> clearLog() }
+        binding.app0Button.setOnClickListener { view: View ->
+            //binding.loggingLayout.visibility = View.VISIBLE
+            //binding.iconLayout.visibility = View.GONE
+            binding.promptLayout.visibility = View.VISIBLE
+            resume = true
+            val timer = object: CountDownTimer(15000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    //TODO
+                }
+                override fun onFinish() {
+                    binding.promptLayout.visibility = View.GONE
+                    resume = false
+                }
+            }
+            timer.start()
+        }
+        //binding.whiteBox.setOnClickListener { launchApp("com.facebook.katana")}
 
         textFields = mutableListOf(binding.leftText, binding.midText, binding.rightText)
 
@@ -61,11 +87,11 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null && resume) {
-            val values = mutableListOf<Int>(0,0,0)
+            val values = mutableListOf<Int>(0, 0, 0)
 
             when (event.sensor.type) {
                 Sensor.TYPE_ACCELEROMETER -> {
-                    for(i in 0..newAccelerometerValue.size-1) { //expected is 0..2
+                    for (i in 0..newAccelerometerValue.size - 1) { //expected is 0..2
                         val v = event.values[i].roundToInt()
                         values[i] = v
                         newAccelerometerValue[i] = v
@@ -73,7 +99,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                     accelerometerValues.add(values)
                 }
                 Sensor.TYPE_GYROSCOPE -> {
-                    for(i in 0..newGyroValue.size-1) { //expected is 0..2
+                    for (i in 0..newGyroValue.size - 1) { //expected is 0..2
                         val v = event.values[i].roundToInt()
                         values[i] = v
                         newGyroValue[i] = v
@@ -91,11 +117,12 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                 binding.scrollView.setBackgroundColor(Color.GREEN)
             } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
             //updateBackground()
+            launchIfShaken()
         }
     }
 
     //Number of values to check
-    private val numsToCheck = 35
+    private val numsToCheck = 5
     //Thresholds to cross
     private val thresholdAX = 2
     private val thresholdGX = 2
@@ -104,17 +131,21 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private val thresholdAZ = 2
     private val thresholdGZ = 2
 
+    private fun launchIfShaken(){
+
+        launchApp("com.facebook.katana")
+        binding.whiteBox.setBackgroundColor(Color.GREEN)
+    }
+
     private fun updateBackground(){
         if(gyroValues.size < numsToCheck || accelerometerValues.size < numsToCheck) return
 
-        for(i in 0..numsToCheck-1) if(xyzOver(thresholdAX, thresholdAY, thresholdAZ, accelerometerValues) && xyzOver(thresholdGX, thresholdGY, thresholdGZ, gyroValues)) {
-
-        /*if(anyOver(thresholdAX, accelerometerValues[0].subList(0,numsToCheck-1)) &&
-            anyOver(thresholdGX, gyroValues[0].subList(0,numsToCheck-1)) &&
-            anyOver(thresholdAY, accelerometerValues[1].subList(0,numsToCheck-1)) &&
-            anyOver(thresholdGY, gyroValues[1].subList(0,numsToCheck-1)) &&
-            anyOver(thresholdAZ, accelerometerValues[2].subList(0,numsToCheck-1)) &&
-            anyOver(thresholdGZ, gyroValues[2].subList(0,numsToCheck-1))) {*/
+        for(i in 0..numsToCheck-1) if(xyzOver(
+                thresholdAX,
+                thresholdAY,
+                thresholdAZ,
+                accelerometerValues
+            ) && xyzOver(thresholdGX, thresholdGY, thresholdGZ, gyroValues)) {
             binding.scrollView.setBackgroundColor(Color.GREEN)
         } else {binding.scrollView.setBackgroundColor(Color.WHITE)}
     }
@@ -130,4 +161,10 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) { return }
+
+    private fun launchApp(packageName: String){
+        val launchIntent: Intent? =
+            activity?.getPackageManager()?.getLaunchIntentForPackage(packageName)
+        launchIntent?.let { startActivity(it) }
+    }
 }
