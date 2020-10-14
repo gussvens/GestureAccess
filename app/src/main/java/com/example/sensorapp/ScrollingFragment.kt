@@ -21,6 +21,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 private const val WORK_THRESHOLD = 3000
+private const val NEW_WORK_THRESHOLD = 20
 
 class ScrollingFragment : Fragment(), SensorEventListener {
 
@@ -111,14 +112,18 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                     }
                     accelerometerValues.add(values)
 
-                    accumulatedWork += (
-                               abs(event.values[0])
-                             + abs(event.values[1])
-                             + abs(event.values[2])
+                    val newWork = (
+                            abs(event.values[0])
+                                    + abs(event.values[1])
+                                    + abs(event.values[2])
                             ).toInt()
+                    Log.d("Scrolling Fragment", "Adding new work: $newWork")
+                    if (newWork > NEW_WORK_THRESHOLD) {
+                        accumulatedWork += newWork
+                    }
                 }
                 Sensor.TYPE_GYROSCOPE -> {
-                    for (i in 0..newGyroValue.size - 1) { //expected is 0..2
+                    for (i in 0 until newGyroValue.size) { //expected is 0..2
                         val v = event.values[i].roundToInt()
                         values[i] = v
                         newGyroValue[i] = v
