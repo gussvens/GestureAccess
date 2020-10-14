@@ -20,7 +20,7 @@ import com.example.sensorapp.databinding.FragmentScollingBinding
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-private const val WORK_THRESHOLD = 10000
+private const val WORK_THRESHOLD = 3000
 
 class ScrollingFragment : Fragment(), SensorEventListener {
 
@@ -54,12 +54,12 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
         binding.startStopButton.setOnClickListener { view: View -> resume = !resume }
         binding.clearButton.setOnClickListener { view: View -> clearLog() }
-        binding.app0Button.setOnClickListener { view: View ->
+        binding.facebookButton.setOnClickListener { view: View ->
             //binding.loggingLayout.visibility = View.VISIBLE
             //binding.iconLayout.visibility = View.GONE
             binding.promptLayout.visibility = View.VISIBLE
             resume = true
-            val timer = object: CountDownTimer(5000, 1000) {
+            val timer = object: CountDownTimer(4000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     //TODO
                 }
@@ -140,30 +140,9 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             Log.d("WORK", "Work: ${accumulatedWork}")
             if(accumulatedWork > WORK_THRESHOLD && !isLaunching) {
                 isLaunching = true
-                launchApp()
+                launchApp("com.facebook.katana")
             }
         }
-
-        /*if (event != null && event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            val curTime = System.currentTimeMillis()
-            // only allow one update every 100ms.
-            if (curTime - lastUpdate > 100) {
-                val diffTime: Long = curTime - lastUpdate
-                lastUpdate = curTime
-                val x = event.values[SensorManager.DATA_X].toInt()
-                val y = event.values[SensorManager.DATA_Y].toInt()
-                val z = event.values[SensorManager.DATA_Z]
-                val speed: Float = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000
-                Log.d("sensor", "shake detected w/ speed: $speed")
-                if (speed > SHAKE_THRESHOLD) {
-                    launchIfShaken()
-                    //Toast.makeText(this, "shake detected w/ speed: $speed", Toast.LENGTH_SHORT).show()
-                }
-                last_x = x
-                last_y = y
-                last_z = z
-            }
-        }*/
     }
 
     //Number of values to check
@@ -176,10 +155,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private val thresholdAZ = 2
     private val thresholdGZ = 2
 
-    private fun launchApp(){
-        launchApp("com.google.android.gm")
-        binding.whiteBox.setBackgroundColor(Color.GREEN)
-    }
 
     private fun updateBackground(){
         if(gyroValues.size < numsToCheck || accelerometerValues.size < numsToCheck) return
