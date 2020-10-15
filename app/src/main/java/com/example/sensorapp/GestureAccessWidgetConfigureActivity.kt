@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 
+// TODO: Class is template code, should be removed or edited to be used properly
 /**
  * The configuration screen for the [GestureAccessWidget] AppWidget.
  */

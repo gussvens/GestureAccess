@@ -16,7 +16,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.example.sensorapp.databinding.FragmentScollingBinding
+import com.example.sensorapp.databinding.FragmentScrollingBinding
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -24,19 +24,40 @@ private const val WORK_THRESHOLD = 3000
 private const val NEW_WORK_THRESHOLD = 20
 
 class ScrollingFragment : Fragment(), SensorEventListener {
+    companion object{
+        //Used by Widget to confirm it is the sender of the intent
+        const val ACTION_WIDGET= "com.example.sensorapp.FROM_WIDGET"
 
-    private lateinit var binding: FragmentScollingBinding
+        // Package names for apps in prototype, should preferably
+        // be loaded in dynamically during runtime and be paired
+        // with app name and icon uri in a custom settings file generated on
+        // installation.
+        const val FACEBOOK_PACKAGE = "com.facebook.katana"
+        const val CHROME_PACKAGE = "com.android.chrome"
+        const val GMAIL_PACKAGE = "com.google.android.gm"
+        const val TWITTER_PACKAGE = "com.twitter.android"
+        //TODO: Add more daily apps to prototype before data collection starts
+
+        //Allows quick checking if the desired application is supported
+        private val VALID_PACKAGES = listOf(
+            FACEBOOK_PACKAGE,
+            CHROME_PACKAGE,
+            GMAIL_PACKAGE,
+            TWITTER_PACKAGE
+        )
+        fun isValidPackage(pkg: String): Boolean {return VALID_PACKAGES.contains(pkg)}
+    }
+
+    private lateinit var binding: FragmentScrollingBinding
     private lateinit var mSensorManager : SensorManager
     private lateinit var textFields: MutableList<TextView>
+
+    // Sensors to use
     private var mAccelerometer : Sensor?= null
-
     private var mGyroscope : Sensor?= null
-    private var resume = false
 
-    /*private var lastUpdate = Long.MIN_VALUE
-    private var last_x: Int = 0
-    private var last_y: Int = 0
-    private var last_z: Float = 0.0f*/
+    // Represents if the program cares about new values from sensors or not
+    private var resume = false
 
     private var accumulatedWork: Int = 0
     private var isLaunching: Boolean = false
@@ -51,13 +72,11 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scolling, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scrolling, container, false)
 
         binding.startStopButton.setOnClickListener { view: View -> resume = !resume }
         binding.clearButton.setOnClickListener { view: View -> clearLog() }
         binding.facebookButton.setOnClickListener { view: View ->
-            //binding.loggingLayout.visibility = View.VISIBLE
-            //binding.iconLayout.visibility = View.GONE
             binding.promptLayout.visibility = View.VISIBLE
             resume = true
             val timer = object: CountDownTimer(4000, 1000) {
@@ -73,7 +92,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             }
             timer.start()
         }
-        //binding.whiteBox.setOnClickListener { launchApp("com.facebook.katana")}
 
         textFields = mutableListOf(binding.leftText, binding.midText, binding.rightText)
 
@@ -89,7 +107,24 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         super.onResume()
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL)
+
+        // Inspects where the Intent that launched/resumed the parent Activity comes from
+        // If it comes from the Widget (ACTION_WIDGET) then try to launch the application indicated by the Widget
+        if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
+            val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
+            if(appToLaunch != null && isValidPackage(appToLaunch)) {
+                //TODO: Add relevant obstacle for the specified application
+                //Could be random or customized by user
+                //when (appToLaunch){
+                //   (application package)  -> (create application specific obstacle)
+                //}
+
+                // Overcame obstacle
+                launchApp(appToLaunch)
+            }
+        }
     }
+
     override fun onPause() {
         super.onPause()
         mSensorManager.unregisterListener(this)
@@ -150,8 +185,10 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         }
     }
 
+    /*
     //Number of values to check
     private val numsToCheck = 5
+
     //Thresholds to cross
     private val thresholdAX = 2
     private val thresholdGX = 2
@@ -177,6 +214,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private fun xyzOver(thresholdX: Int, thresholdY: Int, thresholdZ: Int, list: List<List<Int>>): Boolean {
         return false
     }
+    */
 
     private fun clearLog() {
         for (i in 0..textFields.size-1) textFields[i].text = ""

@@ -12,7 +12,6 @@
         <receiver android:name=".GestureAccessWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.sensorapp.ICON_CLICKED" />
             </intent-filter>
 
             <meta-data
@@ -31,6 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.example.sensorapp.FROM_WIDGET" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

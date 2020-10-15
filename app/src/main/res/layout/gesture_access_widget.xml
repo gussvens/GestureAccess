@@ -6,6 +6,7 @@
     android:padding="@dimen/widget_margin">
 
     <GridLayout
+        android:id="@+id/icon_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
