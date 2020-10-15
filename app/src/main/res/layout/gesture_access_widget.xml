@@ -1,0 +1,271 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:padding="@dimen/widget_margin">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:columnCount="5"
+        android:rowCount="5">
+
+        <ImageView
+            android:id="@+id/button00"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button01"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button02"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button03"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button04"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="0"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button10"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button11"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button12"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button13"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="1"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button14"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="1"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button20"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button21"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button22"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button23"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="2"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button24"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="2"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button30"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button31"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button32"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button33"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="3"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button34"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="3"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button40"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button41"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button42"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="4"
+            android:layout_column="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button43"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="4"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+        <ImageView
+            android:id="@+id/button44"
+            android:layout_width="@dimen/widget_icon_width"
+            android:layout_height="@dimen/widget_icon_width"
+            android:layout_row="4"
+            android:layout_column="4"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/widget_icon_margin"
+            app:srcCompat="@drawable/add_icon" />
+
+
+    </GridLayout>
+
+</RelativeLayout>
