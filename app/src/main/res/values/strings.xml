@@ -11,14 +11,14 @@
 
         <!-- Prototype: hard coded setup of available apps -->
         <string name="default_apps">Canvas\nChrome\nFacebook\nGmail\nTwitter</string>
-        <string name="left_apps">Canvas\nChrome\nGmail</string>
-        <string name="right_apps">Chrome\nCanvas\nFacebook\nGmail </string>
+        <string name="left_apps">Tidal\nChrome\nGmail\nAvanza\nFirefox\nDiscord\nSwish\nMessenger</string>
+        <string name="right_apps">Firefox\nChrome\nGmail\nCanvas\nMessenger\n9gag\nDiscord\nSwish\nTelegram</string>
 
 
     <!-- App UI strings -->
         <string name="difficulty_format">Difficulty level: %s</string>
         <!-- App UI prefixes and suffixes -->
-        <string name="gesture_format">%s\nphone for access</string>
+        <string name="gesture_format">%s\nfor access</string>
         <string name="difficulty_prefix">Difficulty level: </string>
         <string name="progress_format">Progress: %d %%</string>
 

@@ -66,17 +66,27 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     when(pref) {
         context.resources.getString(R.string.left_name) -> {
             //Andreas' test preferences
-            setupButton(context, views, R.id.button00, ScrollingFragment.CANVAS_PACKAGE)
+            setupButton(context, views, R.id.button00, ScrollingFragment.TIDAL_PACKAGE)
             setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
             setupButton(context, views, R.id.button02, ScrollingFragment.GMAIL_PACKAGE)
+            setupButton(context, views, R.id.button03, ScrollingFragment.AVANZA_PACKAGE)
+            setupButton(context, views, R.id.button10, ScrollingFragment.FIREFOX_PACKAGE)
+            setupButton(context, views, R.id.button11, ScrollingFragment.DISCORD_PACKAGE)
+            setupButton(context, views, R.id.button12, ScrollingFragment.SWISH_PACKAGE)
+            setupButton(context, views, R.id.button13, ScrollingFragment.MESSENGER_PACKAGE)
             //setupButton(context, views, R.id.button03, ScrollingFragment.NAME_OF_PACKAGE)
         }
         context.resources.getString(R.string.right_name) -> {
             //Gustav's test preferences
-            setupButton(context, views, R.id.button00, ScrollingFragment.CHROME_PACKAGE)
-            setupButton(context, views, R.id.button01, ScrollingFragment.CANVAS_PACKAGE)
-            setupButton(context, views, R.id.button02, ScrollingFragment.FACEBOOK_PACKAGE)
-            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
+            setupButton(context, views, R.id.button00, ScrollingFragment.FIREFOX_PACKAGE)
+            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
+            setupButton(context, views, R.id.button02, ScrollingFragment.GMAIL_PACKAGE)
+            setupButton(context, views, R.id.button03, ScrollingFragment.CANVAS_PACKAGE)
+            setupButton(context, views, R.id.button04, ScrollingFragment.MESSENGER_PACKAGE)
+            setupButton(context, views, R.id.button10, ScrollingFragment.NINEGAG_PACKAGE)
+            setupButton(context, views, R.id.button11, ScrollingFragment.DISCORD_PACKAGE)
+            setupButton(context, views, R.id.button12, ScrollingFragment.SWISH_PACKAGE)
+            setupButton(context, views, R.id.button13, ScrollingFragment.TELEGRAM_PACKAGE)
             //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
         }
         context.resources.getString(R.string.default_name) -> {
