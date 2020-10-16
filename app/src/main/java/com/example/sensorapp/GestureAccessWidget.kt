@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat.startActivity
@@ -34,6 +33,7 @@ class GestureAccessWidget : AppWidgetProvider() {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             deleteTitlePref(context, appWidgetId)
+            deletePref(context, appWidgetId)
         }
     }
 
@@ -63,21 +63,37 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.gesture_access_widget)
 
-    // The icons in the Widget are just ImageViews using the naming scheme "buttonXY",
-    // where X and Y are the row number resp. column number of the icon in the 5x5 grid
-    // used in the Widget (top left is 00, bottom right 44)
-    //TODO: Use package name to get application icon from the associated apps themselves
-    setupButton(context, views, R.id.button00, R.drawable.canvas_icon, ScrollingFragment.CANVAS_PACKAGE)
-    setupButton(context, views, R.id.button01, R.drawable.google_chrome_icon, ScrollingFragment.CHROME_PACKAGE)
-    setupButton(context, views, R.id.button32, R.drawable.facebook_icon, ScrollingFragment.FACEBOOK_PACKAGE)
-    setupButton(context, views, R.id.button03, R.drawable.gmail_icon, ScrollingFragment.GMAIL_PACKAGE)
-    setupButton(context, views, R.id.button44, R.drawable.twitter_icon, ScrollingFragment.TWITTER_PACKAGE)
+    val pref: String = loadPref(context, appWidgetId)
+    when(pref) {
+        context.resources.getString(R.string.left_name) -> {
+            //Andreas' test preferences
+            setupButton(context, views, R.id.button00, ScrollingFragment.CANVAS_PACKAGE)
+            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
+            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
+            //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
+        }
+        context.resources.getString(R.string.right_name) -> {
+            //Gustav's test preferences
+            setupButton(context, views, R.id.button00, ScrollingFragment.CHROME_PACKAGE)
+            setupButton(context, views, R.id.button01, ScrollingFragment.CANVAS_PACKAGE)
+            setupButton(context, views, R.id.button02, ScrollingFragment.FACEBOOK_PACKAGE)
+            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
+            //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
+        }
+        context.resources.getString(R.string.default_name) -> {
+            setupButton(context, views, R.id.button00, ScrollingFragment.CANVAS_PACKAGE)
+            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
+            setupButton(context, views, R.id.button32, ScrollingFragment.FACEBOOK_PACKAGE)
+            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
+            setupButton(context, views, R.id.button44, ScrollingFragment.TWITTER_PACKAGE)
+        }
+    }
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
 }
 
-internal fun setupButton(context: Context, views: RemoteViews, buttonID: Int, iconID: Int, appToLaunch: String){
+internal fun setupButton(context: Context, views: RemoteViews, buttonID: Int, appToLaunch: String){
     // Get the application icon or fallback to a default
     with (getIcon(context, appToLaunch)) {
         if (this == null) {

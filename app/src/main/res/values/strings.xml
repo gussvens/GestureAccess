@@ -4,4 +4,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
+    <string name="left_name">Andreas</string>
+    <string name="right_name">Gustav</string>
+    <string name="default_name">Default</string>
 </resources>
