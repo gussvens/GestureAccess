@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.example.sensorapp.ScrollingFragment"
+        android:name="com.example.sensorapp.apps.ExternalAppFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

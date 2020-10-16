@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".apps.AppFragment"
-    tools:listitem="@layout/app_item" />
+    tools:context=".apps.ExternalAppFragment"
+    tools:listitem="@layout/external_app_item" />
