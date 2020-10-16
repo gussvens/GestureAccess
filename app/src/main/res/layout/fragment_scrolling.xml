@@ -97,27 +97,51 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <ImageView
+                        android:id="@+id/app_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="- wave phone to open -"
-                        android:textSize="30sp"
+                        app:layout_constraintBottom_toTopOf="@+id/prompt_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/add_icon" />
+
+                    <TextView
+                        android:id="@+id/prompt_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat"
+                        android:text="@string/gesture_promt_suffix"
+                        android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/difficulty_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Progress: 0%"
+                        android:fontFamily="@font/montserrat"
+                        android:text="@string/difficulty_prefix"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="@+id/prompt_text"
+                        app:layout_constraintStart_toStartOf="@+id/prompt_text"
+                        app:layout_constraintTop_toBottomOf="@+id/prompt_text" />
+
+                    <TextView
+                        android:id="@+id/progress_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/montserrat"
+                        android:text="@string/progress_prefix"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView"
-                        app:layout_constraintStart_toStartOf="@+id/textView"
-                        app:layout_constraintTop_toBottomOf="@+id/textView" />
+                        app:layout_constraintEnd_toEndOf="@+id/prompt_text"
+                        app:layout_constraintStart_toStartOf="@+id/prompt_text"
+                        app:layout_constraintTop_toBottomOf="@+id/difficulty_text" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

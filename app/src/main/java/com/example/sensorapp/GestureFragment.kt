@@ -14,10 +14,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.example.sensorapp.databinding.FragmentScrollingBinding
+import com.example.sensorapp.databinding.FragmentMainBinding
 import kotlin.math.abs
 
 private const val TAG = "GestureFragment"
@@ -52,8 +51,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         fun isValidPackage(pkg: String): Boolean {return VALID_PACKAGES.contains(pkg)}
     }
 
-    private lateinit var binding: FragmentScrollingBinding
-    private lateinit var textFields: MutableList<TextView>
+    private lateinit var binding: FragmentMainBinding
 
     // Actuator
     private lateinit var vibrator: Vibrator
@@ -66,15 +64,28 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private var isLaunching: Boolean = false
     private var accumulatedWork: Int = 0
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_scrolling, container, false)
-        binding.facebookButton.setOnClickListener(requestLaunch(GMAIL_PACKAGE))
+    private val timer = object: CountDownTimer(GESTURE_TIME, 100) {
+        override fun onTick(millisUntilFinished: Long) {
+            if (!isLaunching) {
+                teardown()
+                cancel()
+            }
+        }
+        override fun onFinish() {
+            teardown()
+        }
+    }
 
-        textFields = mutableListOf(binding.leftText, binding.midText, binding.rightText)
+    private fun teardown() {
+        accumulatedWork = 0
+        isLaunching = false
+        activity?.finishAndRemoveTask()
+    }
+
+    private lateinit var requestedApplication: String
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
 
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -82,29 +93,9 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         return binding.root
     }
 
-    private fun requestLaunch(packageName: String): View.OnClickListener {
-        return View.OnClickListener {
-            isLaunching = true
-            binding.promptLayout.visibility = View.VISIBLE
-            val timer = object: CountDownTimer(GESTURE_TIME, 100) {
-                override fun onTick(millisUntilFinished: Long) {
-                    if (!isLaunching) {
-                        teardown()
-                        cancel()
-                    }
-                }
-                override fun onFinish() {
-                    teardown()
-                }
-
-                private fun teardown() {
-                    binding.promptLayout.visibility = View.GONE
-                    accumulatedWork = 0
-                    isLaunching = false
-                }
-            }
-            timer.start()
-        }
+    private fun startTimer(){
+        isLaunching = true
+        timer.start()
     }
 
     override fun onResume() {
@@ -129,12 +120,27 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
             val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
             if(appToLaunch != null && isValidPackage(appToLaunch)) {
-
-
+                requestedApplication = appToLaunch
+                initRequestUI()
+                isLaunching = true
+                timer.start()
+                //startTimer()
                 // Overcame obstacle
-                launchApp(appToLaunch)
+                //launchApp(appToLaunch)
             }
         }
+    }
+
+    private fun initRequestUI(){
+        binding.appIcon.setImageDrawable(context?.let { getIcon(it,requestedApplication) })
+        binding.promptText.text = "Replace me ${resources.getString(R.string.gesture_promt_suffix)}"
+        binding.difficultyText.text = "${resources.getString(R.string.difficulty_prefix)} Replace me"
+        updateProgress(0)
+    }
+
+    //TODO replace with LiveData
+    private  fun updateProgress(progress: Int){
+        binding.progressText.text = "${resources.getString(R.string.progress_prefix)} $progress${resources.getString(R.string.progress_suffix)}"
     }
 
     override fun onPause() {
@@ -169,7 +175,10 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
             Log.d("WORK", "Work: ${accumulatedWork}")
             if(accumulatedWork > WORK_THRESHOLD && isLaunching) {
-                launchApp(GMAIL_PACKAGE)
+                launchApp(requestedApplication)
+            }
+            else {
+                updateProgress(accumulatedWork / WORK_THRESHOLD)
             }
         }
     }
