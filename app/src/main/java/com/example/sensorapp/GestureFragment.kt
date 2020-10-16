@@ -18,11 +18,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentMainBinding
 import kotlin.math.abs
+import kotlin.random.Random
 
 private const val TAG = "GestureFragment"
-private const val WORK_THRESHOLD = 200
 private const val NEW_WORK_THRESHOLD = 15
 private const val GESTURE_TIME: Long = 15 * 1000 // ms
+private const val LOW_DIFFICULTY_THRESHOLD = 150
+private const val MEDIUM_DIFFICULTY_THRESHOLD = 300
+private const val HIGH_DIFFICULTY_THRESHOLD = 450
 
 class ScrollingFragment : Fragment(), SensorEventListener {
     enum class Gesture {
@@ -58,6 +61,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: GestureViewModel
     private var currentGesture = Gesture.SHAKE_Y_Z
+    private var currentDifficulty = LOW_DIFFICULTY_THRESHOLD
 
     // Actuator
     private lateinit var vibrator: Vibrator
@@ -126,6 +130,18 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
             val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
             if(appToLaunch != null && isValidPackage(appToLaunch)) {
+                currentGesture = when(Random.nextInt(0, 3)) {
+                    0 -> Gesture.SHAKE
+                    1 -> Gesture.SHAKE_X
+                    2 -> Gesture.SHAKE_Y_Z
+                    else -> Gesture.SHAKE
+                }
+                currentDifficulty = when(Random.nextInt(0, 3)) {
+                    0 -> LOW_DIFFICULTY_THRESHOLD
+                    1 -> MEDIUM_DIFFICULTY_THRESHOLD
+                    2 -> HIGH_DIFFICULTY_THRESHOLD
+                    else -> LOW_DIFFICULTY_THRESHOLD
+                }
                 requestLaunch(appToLaunch)
             }
         } else if(this.activity?.intent?.action.equals("android.intent.action.MAIN")) {
@@ -163,11 +179,11 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             }
 
             Log.d("WORK", "Work: ${accumulatedWork}")
-            if(accumulatedWork > WORK_THRESHOLD && isLaunching) {
+            if(accumulatedWork > currentDifficulty && isLaunching) {
                 launchApp(requestedApplication)
             }
 
-            val progress = ((accumulatedWork.toFloat() / WORK_THRESHOLD)*100).toInt()
+            val progress = ((accumulatedWork.toFloat() / currentDifficulty)*100).toInt()
             viewModel.updateProgress(progress)
         }
     }
