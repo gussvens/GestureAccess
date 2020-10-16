@@ -32,7 +32,6 @@ class GestureAccessWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
             deletePref(context, appWidgetId)
         }
     }
@@ -69,8 +68,8 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
             //Andreas' test preferences
             setupButton(context, views, R.id.button00, ScrollingFragment.CANVAS_PACKAGE)
             setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
-            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
-            //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
+            setupButton(context, views, R.id.button02, ScrollingFragment.GMAIL_PACKAGE)
+            //setupButton(context, views, R.id.button03, ScrollingFragment.NAME_OF_PACKAGE)
         }
         context.resources.getString(R.string.right_name) -> {
             //Gustav's test preferences

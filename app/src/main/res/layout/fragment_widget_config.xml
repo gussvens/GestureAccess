@@ -12,24 +12,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/configure" />
-
-        <EditText
-            android:id="@+id/appwidget_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:fontFamily="@font/montserrat"
+            android:text="@string/configure"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="36sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/add_button"
+                android:id="@+id/default_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/add_widget"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/default_name"
+                android:textColor="@color/colorAccent"
                 app:layout_constraintEnd_toStartOf="@+id/left_button"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,10 +40,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/montserrat"
                 android:text="@string/left_name"
+                android:textColor="@color/colorAccent"
                 app:layout_constraintEnd_toStartOf="@+id/right_button"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/add_button"
+                app:layout_constraintStart_toEndOf="@+id/default_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -51,11 +54,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/montserrat"
                 android:text="@string/right_name"
+                android:textColor="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/left_button"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/default_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/default_apps"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="@+id/default_button"
+                app:layout_constraintStart_toStartOf="@+id/default_button"
+                app:layout_constraintTop_toBottomOf="@+id/default_button" />
+
+            <TextView
+                android:id="@+id/left_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/left_apps"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="@+id/left_button"
+                app:layout_constraintStart_toStartOf="@+id/left_button"
+                app:layout_constraintTop_toBottomOf="@+id/left_button" />
+
+            <TextView
+                android:id="@+id/right_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/right_apps"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="@+id/right_button"
+                app:layout_constraintStart_toStartOf="@+id/right_button"
+                app:layout_constraintTop_toBottomOf="@+id/right_button" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

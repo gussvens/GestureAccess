@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Gesture Access</string>
-    <string name="action_settings">Settings</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
     <string name="left_name">Andreas</string>
     <string name="right_name">Gustav</string>
     <string name="default_name">Default</string>
+    <string name="default_apps">Canvas\nChrome\nFacebook\nGmail\nTwitter</string>
+    <string name="left_apps">Canvas\nChrome\nGmail</string>
+    <string name="right_apps">Chrome\nCanvas\nFacebook\nGmail </string>
 </resources>

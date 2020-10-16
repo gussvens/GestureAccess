@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentWidgetConfigBinding
@@ -16,7 +15,6 @@ import com.example.sensorapp.databinding.FragmentWidgetConfigBinding
 class WidgetConfigFragment : Fragment(){
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var appWidgetText: EditText
 
     private lateinit var binding: FragmentWidgetConfigBinding
 
@@ -27,26 +25,9 @@ class WidgetConfigFragment : Fragment(){
         // out of the widget placement if the user presses the back button.
         this.activity?.setResult(Activity.RESULT_CANCELED)
 
-        appWidgetText = binding.appwidgetText as EditText
-
+        this.setListener(binding.defaultButton, resources.getString(R.string.default_name))
         this.setListener(binding.leftButton, resources.getString(R.string.left_name))
         this.setListener(binding.rightButton, resources.getString(R.string.right_name))
-
-        binding.addButton.setOnClickListener{
-            // When the button is clicked, store the string locally
-            val widgetText = appWidgetText.text.toString()
-            this.context?.let { it1 -> saveTitlePref(it1, appWidgetId, widgetText) }
-
-            // It is the responsibility of the configuration activity to update the app widget
-            val appWidgetManager = AppWidgetManager.getInstance(this.context)
-            this.context?.let { it1 -> updateAppWidget(it1, appWidgetManager, appWidgetId) }
-
-            // Make sure we pass back the original appWidgetId
-            val resultValue = Intent()
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            this.activity?.setResult(Activity.RESULT_OK, resultValue)
-            this.activity?.finish()
-        }
 
         return binding.root
     }
@@ -85,33 +66,11 @@ class WidgetConfigFragment : Fragment(){
             this.activity?.finish()
             return
         }
-        //appWidgetText.setText(this.context?.let { loadTitlePref(it, appWidgetId) })
     }
 }
 
 private const val PREFS_NAME = "com.example.sensorapp.GestureAccessWidget"
 private const val PREF_PREFIX_KEY = "appwidget_"
-
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
-    prefs.apply()
-}
-
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: context.getString(R.string.appwidget_text)
-}
-
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId)
-    prefs.apply()
-}
 
 // Write the prefix to the SharedPreferences object for this widget
 internal fun savePref(context: Context, appWidgetId: Int, text: String) {
