@@ -36,6 +36,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         const val CHROME_PACKAGE = "com.android.chrome"
         const val GMAIL_PACKAGE = "com.google.android.gm"
         const val TWITTER_PACKAGE = "com.twitter.android"
+        const val CANVAS_PACKAGE = "com.instructure.candroid"
         //TODO: Add more daily apps to prototype before data collection starts
 
         //Allows quick checking if the desired application is supported
@@ -43,7 +44,8 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             FACEBOOK_PACKAGE,
             CHROME_PACKAGE,
             GMAIL_PACKAGE,
-            TWITTER_PACKAGE
+            TWITTER_PACKAGE,
+            CANVAS_PACKAGE
         )
         fun isValidPackage(pkg: String): Boolean {return VALID_PACKAGES.contains(pkg)}
     }
