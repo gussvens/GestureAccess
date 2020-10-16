@@ -1,5 +1,6 @@
 package com.example.sensorapp
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -17,21 +18,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentMainBinding
-import kotlin.math.abs
-import kotlin.random.Random
 
 private const val TAG = "GestureFragment"
 private const val NEW_WORK_THRESHOLD = 15
 private const val GESTURE_TIME: Long = 15 * 1000 // ms
-private const val LOW_DIFFICULTY_THRESHOLD = 150
-private const val MEDIUM_DIFFICULTY_THRESHOLD = 300
-private const val HIGH_DIFFICULTY_THRESHOLD = 450
 
 class ScrollingFragment : Fragment(), SensorEventListener {
-    enum class Gesture {
-        SHAKE, SHAKE_X, SHAKE_Y_Z
-    }
-
     companion object{
         //Used by Widget to confirm it is the sender of the intent
         const val ACTION_WIDGET= "com.example.sensorapp.FROM_WIDGET"
@@ -60,8 +52,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: GestureViewModel
-    private var currentGesture = Gesture.SHAKE_Y_Z
-    private var currentDifficulty = LOW_DIFFICULTY_THRESHOLD
 
     // Actuator
     private lateinit var vibrator: Vibrator
@@ -81,7 +71,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
 
-        viewModel = GestureViewModel()
+        viewModel = GestureViewModel(context?.applicationContext as Application)
 
         binding.gestureViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -104,8 +94,10 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         requestedApplication = packageName
         accumulatedWork = 0
         isLaunching = true
+        viewModel.randomGesture()
+        viewModel.randomDifficulty()
         timer.start()
-        initRequestUI()
+        binding.appIcon.setImageDrawable(context?.let { getIcon(it,requestedApplication) })
     }
 
     private fun teardown() {
@@ -130,29 +122,11 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
             val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
             if(appToLaunch != null && isValidPackage(appToLaunch)) {
-                currentGesture = when(Random.nextInt(0, 3)) {
-                    0 -> Gesture.SHAKE
-                    1 -> Gesture.SHAKE_X
-                    2 -> Gesture.SHAKE_Y_Z
-                    else -> Gesture.SHAKE
-                }
-                currentDifficulty = when(Random.nextInt(0, 3)) {
-                    0 -> LOW_DIFFICULTY_THRESHOLD
-                    1 -> MEDIUM_DIFFICULTY_THRESHOLD
-                    2 -> HIGH_DIFFICULTY_THRESHOLD
-                    else -> LOW_DIFFICULTY_THRESHOLD
-                }
                 requestLaunch(appToLaunch)
             }
         } else if(this.activity?.intent?.action.equals("android.intent.action.MAIN")) {
             teardown()
         }
-    }
-
-    private fun initRequestUI(){
-        binding.appIcon.setImageDrawable(context?.let { getIcon(it,requestedApplication) })
-        binding.promptText.text = "Replace me ${resources.getString(R.string.gesture_promt_suffix)}"
-        binding.difficultyText.text = "${resources.getString(R.string.difficulty_prefix)} Replace me"
     }
 
     override fun onPause() {
@@ -167,7 +141,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if (isLaunching) {
             when (event.sensor.type) {
                 Sensor.TYPE_ACCELEROMETER -> {
-                    val work = calculateWork(event.values)
+                    val work = viewModel.calculateWork(accelerometerReading, event.values)
                     if (work > NEW_WORK_THRESHOLD) {
                         vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
                         accumulatedWork += work
@@ -179,41 +153,12 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             }
 
             Log.d("WORK", "Work: ${accumulatedWork}")
-            if(accumulatedWork > currentDifficulty && isLaunching) {
+            if(viewModel.calculateSuccess(accumulatedWork) && isLaunching) {
                 launchApp(requestedApplication)
             }
 
-            val progress = ((accumulatedWork.toFloat() / currentDifficulty)*100).toInt()
-            viewModel.updateProgress(progress)
+            viewModel.updateProgress(accumulatedWork)
         }
-    }
-
-    private fun calculateWork(newAccReadings: FloatArray): Int {
-        if (newAccReadings.size != 3) {
-            throw IllegalArgumentException("The accelerometer array do not contain three values," +
-                    " there should be values for x, y, and z. Size: ${newAccReadings.size}")
-        }
-
-        var work = 0
-        val (X, Y, Z)  = arrayOf(0, 1, 2)
-        when (currentGesture) {
-            Gesture.SHAKE -> {
-                val old = accelerometerReading.sum()
-                val new = newAccReadings.sum()
-                work = (abs(new - old)).toInt()
-            }
-            Gesture.SHAKE_X -> {
-                work = (abs(newAccReadings[X] - accelerometerReading[X])).toInt()
-            }
-            Gesture.SHAKE_Y_Z -> {
-                work = (abs(
-                        newAccReadings[Y] + newAccReadings[Z]
-                                - accelerometerReading[Y] - accelerometerReading[Z]
-                )).toInt()
-            }
-        }
-
-        return work
     }
 
     private fun launchApp(packageName: String) {

@@ -16,8 +16,9 @@
 
 
     <!-- App UI strings -->
+        <string name="difficulty_format">Difficulty level: %s</string>
         <!-- App UI prefixes and suffixes -->
-        <string name="gesture_promt_suffix">phone for access</string>
+        <string name="gesture_format">%s\nphone for access</string>
         <string name="difficulty_prefix">Difficulty level: </string>
         <string name="progress_format">Progress: %d %%</string>
 
