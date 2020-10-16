@@ -1,14 +1,38 @@
 <resources>
     <string name="app_name">Gesture Access</string>
-    <string name="configure">Configure</string>
-    <string name="left_name">Andreas</string>
-    <string name="right_name">Gustav</string>
-    <string name="default_name">Default</string>
-    <string name="default_apps">Canvas\nChrome\nFacebook\nGmail\nTwitter</string>
-    <string name="left_apps">Canvas\nChrome\nGmail</string>
-    <string name="right_apps">Chrome\nCanvas\nFacebook\nGmail </string>
-    <string name="gesture_promt_suffix">phone for access</string>
-    <string name="difficulty_prefix">Difficulty level: </string>
-    <string name="progress_prefix">Progress: </string>
-    <string name="progress_suffix">%</string>
+
+    <!-- Widget UI strings -->
+        <string name="configure">Configure</string>
+
+        <!-- Prototype: hard coded setup of available presets -->
+        <string name="left_name">Andreas</string>
+        <string name="right_name">Gustav</string>
+        <string name="default_name">Default</string>
+
+        <!-- Prototype: hard coded setup of available apps -->
+        <string name="default_apps">Canvas\nChrome\nFacebook\nGmail\nTwitter</string>
+        <string name="left_apps">Canvas\nChrome\nGmail</string>
+        <string name="right_apps">Chrome\nCanvas\nFacebook\nGmail </string>
+
+
+    <!-- App UI strings -->
+        <!-- App UI prefixes and suffixes -->
+        <string name="gesture_promt_suffix">phone for access</string>
+        <string name="difficulty_prefix">Difficulty level: </string>
+        <string name="progress_prefix">Progress: </string>
+        <string name="progress_suffix">%</string>
+
+        <!-- Difficulty descriptions -->
+        <string name="difficulty_low">LOW</string>
+        <string name="difficulty_medium">MEDIUM</string>
+        <string name="difficulty_high">HIGH</string>
+
+        <!-- Gesture descriptions -->
+        <string name="gesture_shake_all">Shake</string>
+        <string name="gesture_shake_x">Shake sideways</string>
+        <string name="gesture_shake_y_z">Shake up and down</string>
+
+
+    <!-- UI's Content descriptions -->
+        <string name="app_icon_content_description">Icon of requested application</string>
 </resources>
