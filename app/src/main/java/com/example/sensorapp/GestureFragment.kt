@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.sensorapp.databinding.FragmentMainBinding
 import kotlin.math.abs
 
@@ -52,6 +53,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     }
 
     private lateinit var binding: FragmentMainBinding
+    private lateinit var viewModel: GestureViewModel
 
     // Actuator
     private lateinit var vibrator: Vibrator
@@ -63,39 +65,49 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
     private var isLaunching: Boolean = false
     private var accumulatedWork: Int = 0
-
-    private val timer = object: CountDownTimer(GESTURE_TIME, 100) {
-        override fun onTick(millisUntilFinished: Long) {
-            if (!isLaunching) {
-                teardown()
-                cancel()
-            }
-        }
-        override fun onFinish() {
-            teardown()
-        }
-    }
-
-    private fun teardown() {
-        accumulatedWork = 0
-        isLaunching = false
-        activity?.finishAndRemoveTask()
-    }
+    private lateinit var timer: CountDownTimer
 
     private lateinit var requestedApplication: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+
+        viewModel = GestureViewModel()
+        viewModel.progress.observe(viewLifecycleOwner, Observer { newProgress ->
+            binding.progressText.text = newProgress.toString()
+        })
+
+        binding.gestureViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
+        timer = object: CountDownTimer(GESTURE_TIME, GESTURE_TIME) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {
+                teardown()
+            }
+        }
+
         return binding.root
     }
 
-    private fun startTimer(){
+    private fun requestLaunch(packageName: String) {
+        timer.cancel()
+        requestedApplication = packageName
+        accumulatedWork = 0
         isLaunching = true
         timer.start()
+        initRequestUI()
+    }
+
+    private fun teardown() {
+        timer.cancel()
+        accumulatedWork = 0
+        isLaunching = false
+        activity?.finishAndRemoveTask()
     }
 
     override fun onResume() {
@@ -120,13 +132,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
             val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
             if(appToLaunch != null && isValidPackage(appToLaunch)) {
-                requestedApplication = appToLaunch
-                initRequestUI()
-                isLaunching = true
-                timer.start()
-                //startTimer()
-                // Overcame obstacle
-                //launchApp(appToLaunch)
+                requestLaunch(appToLaunch)
             }
         }
     }
@@ -135,12 +141,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         binding.appIcon.setImageDrawable(context?.let { getIcon(it,requestedApplication) })
         binding.promptText.text = "Replace me ${resources.getString(R.string.gesture_promt_suffix)}"
         binding.difficultyText.text = "${resources.getString(R.string.difficulty_prefix)} Replace me"
-        updateProgress(0)
-    }
-
-    //TODO replace with LiveData
-    private  fun updateProgress(progress: Int){
-        binding.progressText.text = "${resources.getString(R.string.progress_prefix)} $progress${resources.getString(R.string.progress_suffix)}"
     }
 
     override fun onPause() {
@@ -177,18 +177,17 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             if(accumulatedWork > WORK_THRESHOLD && isLaunching) {
                 launchApp(requestedApplication)
             }
-            else {
-                updateProgress(accumulatedWork / WORK_THRESHOLD)
-            }
+
+            val progress = ((accumulatedWork.toFloat() / WORK_THRESHOLD)*100).toInt()
+            viewModel.updateProgress(progress)
         }
     }
 
     private fun launchApp(packageName: String) {
-        isLaunching = false
-        accumulatedWork = 0
         val launchIntent: Intent? =
             context?.getPackageManager()?.getLaunchIntentForPackage(packageName)
         launchIntent?.let { startActivity(it) }
+        teardown()
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) { return }

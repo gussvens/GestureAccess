@@ -137,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/montserrat"
-                        android:text="@string/progress_prefix"
+                        android:text="@string/progress_format"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="@+id/prompt_text"
                         app:layout_constraintStart_toStartOf="@+id/prompt_text"

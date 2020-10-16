@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <data>
+        <variable
+            name="gestureViewModel"
+            type="com.example.sensorapp.GestureViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -49,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/montserrat"
-            android:text="@string/progress_prefix"
+        android:text="@{@string/progress_format(gestureViewModel.progress)}"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/difficulty_text"
             app:layout_constraintStart_toStartOf="@+id/difficulty_text"

@@ -9,6 +9,5 @@
     <string name="right_apps">Chrome\nCanvas\nFacebook\nGmail </string>
     <string name="gesture_promt_suffix">phone for access</string>
     <string name="difficulty_prefix">Difficulty level: </string>
-    <string name="progress_prefix">Progress: </string>
-    <string name="progress_suffix">%</string>
+    <string name="progress_format">Progress: %d %%</string>
 </resources>
