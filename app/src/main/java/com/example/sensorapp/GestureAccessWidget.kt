@@ -87,6 +87,9 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
             setupButton(context, views, R.id.button11, ScrollingFragment.DISCORD_PACKAGE)
             setupButton(context, views, R.id.button12, ScrollingFragment.SWISH_PACKAGE)
             setupButton(context, views, R.id.button13, ScrollingFragment.TELEGRAM_PACKAGE)
+            setupButton(context, views, R.id.button14, ScrollingFragment.PODCAST_ADDICT_PACKAGE)
+            setupButton(context, views, R.id.button20, ScrollingFragment.SPOTIFY_PACKAGE)
+            setupButton(context, views, R.id.button24, ScrollingFragment.FACEBOOK_PACKAGE)
             //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
         }
         context.resources.getString(R.string.default_name) -> {

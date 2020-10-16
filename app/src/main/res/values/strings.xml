@@ -12,7 +12,7 @@
         <!-- Prototype: hard coded setup of available apps -->
         <string name="default_apps">Canvas\nChrome\nFacebook\nGmail\nTwitter</string>
         <string name="left_apps">Tidal\nChrome\nGmail\nAvanza\nFirefox\nDiscord\nSwish\nMessenger</string>
-        <string name="right_apps">Firefox\nChrome\nGmail\nCanvas\nMessenger\n9gag\nDiscord\nSwish\nTelegram</string>
+        <string name="right_apps">Firefox\nChrome\nGmail\nCanvas\nMessenger\n9gag\nDiscord\nSwish\nTelegram\nPodcast Addict\nSpotify\nFacebook</string>
 
 
     <!-- App UI strings -->

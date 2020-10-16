@@ -5,9 +5,10 @@ import androidx.lifecycle.*
 import kotlin.math.abs
 import kotlin.random.Random
 
-private const val LOW_DIFFICULTY_THRESHOLD = 150
-private const val MEDIUM_DIFFICULTY_THRESHOLD = 300
-private const val HIGH_DIFFICULTY_THRESHOLD = 450
+private const val LOW_DIFFICULTY_THRESHOLD = 300
+private const val MEDIUM_DIFFICULTY_THRESHOLD = 600
+private const val HIGH_DIFFICULTY_THRESHOLD = 900
+private const val EXTREME_DIFFICULTY_THRESHOLD = 3000
 
 class GestureViewModel(application: Application) : AndroidViewModel(application) {
     enum class Gesture {
@@ -15,7 +16,7 @@ class GestureViewModel(application: Application) : AndroidViewModel(application)
     }
 
     enum class Difficulty {
-        LOW, MEDIUM, HIGH
+        LOW, MEDIUM, HIGH, EXTREME
     }
 
     private val _progress = MutableLiveData<Int>()
@@ -46,6 +47,7 @@ class GestureViewModel(application: Application) : AndroidViewModel(application)
             Difficulty.LOW -> LOW_DIFFICULTY_THRESHOLD
             Difficulty.MEDIUM -> MEDIUM_DIFFICULTY_THRESHOLD
             Difficulty.HIGH -> HIGH_DIFFICULTY_THRESHOLD
+            Difficulty.EXTREME -> EXTREME_DIFFICULTY_THRESHOLD
             else -> LOW_DIFFICULTY_THRESHOLD
         }
     }
@@ -71,10 +73,11 @@ class GestureViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun randomDifficulty() {
-        _difficulty.value = when(Random.nextInt(0, 3)) {
+        _difficulty.value = when(Random.nextInt(0, 4)) {
             0 -> Difficulty.LOW
             1 -> Difficulty.MEDIUM
             2 -> Difficulty.HIGH
+            3 -> Difficulty.EXTREME
             else -> Difficulty.LOW
         }
     }
@@ -84,6 +87,7 @@ class GestureViewModel(application: Application) : AndroidViewModel(application)
             Difficulty.LOW -> LOW_DIFFICULTY_THRESHOLD
             Difficulty.MEDIUM -> MEDIUM_DIFFICULTY_THRESHOLD
             Difficulty.HIGH -> HIGH_DIFFICULTY_THRESHOLD
+            Difficulty.EXTREME -> EXTREME_DIFFICULTY_THRESHOLD
             else -> LOW_DIFFICULTY_THRESHOLD
         }
         return (accumulatedWork > threshold)
