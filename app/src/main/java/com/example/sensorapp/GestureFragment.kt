@@ -74,9 +74,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
 
         viewModel = GestureViewModel()
-        viewModel.progress.observe(viewLifecycleOwner, Observer { newProgress ->
-            binding.progressText.text = newProgress.toString()
-        })
 
         binding.gestureViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
