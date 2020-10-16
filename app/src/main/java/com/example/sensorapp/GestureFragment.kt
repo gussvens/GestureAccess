@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.sensorapp.databinding.FragmentMainBinding
 import kotlin.math.abs
 
@@ -26,6 +25,10 @@ private const val NEW_WORK_THRESHOLD = 15
 private const val GESTURE_TIME: Long = 15 * 1000 // ms
 
 class ScrollingFragment : Fragment(), SensorEventListener {
+    enum class Gesture {
+        SHAKE, SHAKE_X, SHAKE_Y_Z
+    }
+
     companion object{
         //Used by Widget to confirm it is the sender of the intent
         const val ACTION_WIDGET= "com.example.sensorapp.FROM_WIDGET"
@@ -54,6 +57,7 @@ class ScrollingFragment : Fragment(), SensorEventListener {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: GestureViewModel
+    private var currentGesture = Gesture.SHAKE_Y_Z
 
     // Actuator
     private lateinit var vibrator: Vibrator
@@ -116,13 +120,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
                 SensorManager.SENSOR_DELAY_NORMAL
             )
         }
-        sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)?.also {
-            sensorManager.registerListener(
-                this,
-                it,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-        }
 
         // Inspects where the Intent that launched/resumed the parent Activity comes from
         // If it comes from the Widget (ACTION_WIDGET) then try to launch the application indicated by the Widget
@@ -131,6 +128,8 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             if(appToLaunch != null && isValidPackage(appToLaunch)) {
                 requestLaunch(appToLaunch)
             }
+        } else if(this.activity?.intent?.action.equals("android.intent.action.MAIN")) {
+            teardown()
         }
     }
 
@@ -152,21 +151,14 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         if (isLaunching) {
             when (event.sensor.type) {
                 Sensor.TYPE_ACCELEROMETER -> {
-                    val previousReading = accelerometerReading.sum()
+                    val work = calculateWork(event.values)
+                    if (work > NEW_WORK_THRESHOLD) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+                        accumulatedWork += work
+                    }
+
                     // Replace old values with new readings
                     System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
-                    val currentReading = accelerometerReading.sum()
-
-                    val diff = abs(event.values.sum() - previousReading)
-
-                    if (diff > NEW_WORK_THRESHOLD) {
-                        accumulatedWork += diff.toInt()
-                        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
-                    }
-                }
-                Sensor.TYPE_GYROSCOPE -> {
-                    System.arraycopy(event.values, 0, gyroReading, 0, gyroReading.size)
-                    // Log.d(TAG, "Gyro values: ${gyroReading[0]} ${gyroReading[1]} ${gyroReading[2]}")
                 }
             }
 
@@ -178,6 +170,34 @@ class ScrollingFragment : Fragment(), SensorEventListener {
             val progress = ((accumulatedWork.toFloat() / WORK_THRESHOLD)*100).toInt()
             viewModel.updateProgress(progress)
         }
+    }
+
+    private fun calculateWork(newAccReadings: FloatArray): Int {
+        if (newAccReadings.size != 3) {
+            throw IllegalArgumentException("The accelerometer array do not contain three values," +
+                    " there should be values for x, y, and z. Size: ${newAccReadings.size}")
+        }
+
+        var work = 0
+        val (X, Y, Z)  = arrayOf(0, 1, 2)
+        when (currentGesture) {
+            Gesture.SHAKE -> {
+                val old = accelerometerReading.sum()
+                val new = newAccReadings.sum()
+                work = (abs(new - old)).toInt()
+            }
+            Gesture.SHAKE_X -> {
+                work = (abs(newAccReadings[X] - accelerometerReading[X])).toInt()
+            }
+            Gesture.SHAKE_Y_Z -> {
+                work = (abs(
+                        newAccReadings[Y] + newAccReadings[Z]
+                                - accelerometerReading[Y] - accelerometerReading[Z]
+                )).toInt()
+            }
+        }
+
+        return work
     }
 
     private fun launchApp(packageName: String) {
