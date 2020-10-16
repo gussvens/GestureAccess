@@ -3,9 +3,9 @@
     android:configure="com.example.sensorapp.GestureAccessWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/gesture_access_widget"
     android:initialLayout="@layout/gesture_access_widget"
-    android:minWidth="110dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:minWidth="275dp"
+    android:minHeight="165dp"
+    android:previewImage="@drawable/widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"></appwidget-provider>
