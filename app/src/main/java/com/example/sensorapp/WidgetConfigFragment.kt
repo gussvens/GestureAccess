@@ -6,13 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentWidgetConfigBinding
@@ -23,6 +21,7 @@ class WidgetConfigFragment : Fragment(){
 
     private lateinit var binding: FragmentWidgetConfigBinding
     private val installedApps: MutableList<ExternalApp> = mutableListOf()
+    private var selectedApp: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_widget_config, container, false)
@@ -47,6 +46,14 @@ class WidgetConfigFragment : Fragment(){
                 )
             }
         }
+        val adapter = ExternalAppRecyclerViewAdapter(
+            ExternalAppRecyclerViewAdapter.ExternalAppListener { app ->
+                Log.d("Listener", "Selected app: ${app.packageName}")
+                selectedApp = app.packageName
+            })
+        adapter.submitList(installedApps)
+        binding.externalAppList.adapter = adapter
+
 
         return binding.root
     }
@@ -86,12 +93,6 @@ class WidgetConfigFragment : Fragment(){
             return
         }
     }
-
-    data class ExternalApp(
-        val packageName: String,
-        val label: String,
-        val icon: Drawable,
-    )
 }
 
 private const val PREFS_NAME = "com.example.sensorapp.GestureAccessWidget"

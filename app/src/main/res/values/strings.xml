@@ -2,7 +2,7 @@
     <string name="app_name">Gesture Access</string>
 
     <!-- Widget UI strings -->
-        <string name="configure">Configure</string>
+        <string name="app_select_title">Select app</string>
 
         <!-- Prototype: hard coded setup of available presets -->
         <string name="left_name">Andreas</string>

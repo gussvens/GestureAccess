@@ -14,7 +14,7 @@
             android:layout_marginBottom="8dp"
             android:layout_margin="@dimen/text_margin"
             android:fontFamily="@font/montserrat"
-            android:text="@string/configure"
+            android:text="@string/app_select_title"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -22,8 +22,10 @@
             android:textSize="36sp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/external_app_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/configure_save_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
