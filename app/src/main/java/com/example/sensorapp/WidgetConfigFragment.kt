@@ -4,10 +4,15 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sensorapp.databinding.FragmentWidgetConfigBinding
@@ -17,6 +22,7 @@ class WidgetConfigFragment : Fragment(){
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     private lateinit var binding: FragmentWidgetConfigBinding
+    private val installedApps: MutableList<ExternalApp> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_widget_config, container, false)
@@ -25,9 +31,22 @@ class WidgetConfigFragment : Fragment(){
         // out of the widget placement if the user presses the back button.
         this.activity?.setResult(Activity.RESULT_CANCELED)
 
-        this.setListener(binding.defaultButton, resources.getString(R.string.default_name))
-        this.setListener(binding.leftButton, resources.getString(R.string.left_name))
-        this.setListener(binding.rightButton, resources.getString(R.string.right_name))
+        val packageManager = context?.packageManager
+        val apps = packageManager?.getInstalledApplications(PackageManager.GET_META_DATA)
+
+        for (app in apps!!) {
+            if ((app.flags and ApplicationInfo.FLAG_SYSTEM) == 0) {
+                val drawable = packageManager.getApplicationIcon(app.packageName)
+
+                installedApps.add(
+                    ExternalApp(
+                        app.packageName,
+                        app.loadLabel(packageManager).toString(),
+                        drawable
+                    )
+                )
+            }
+        }
 
         return binding.root
     }
@@ -67,6 +86,12 @@ class WidgetConfigFragment : Fragment(){
             return
         }
     }
+
+    data class ExternalApp(
+        val packageName: String,
+        val label: String,
+        val icon: Drawable,
+    )
 }
 
 private const val PREFS_NAME = "com.example.sensorapp.GestureAccessWidget"
