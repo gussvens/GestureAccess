@@ -39,9 +39,10 @@ class GestureAccessWidget : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent);
 
-        if (intent != null && intent.action != null) {
+        if (intent != null && intent.action != null && !intent!!.action!!.contains("APPWIDGET_")) {
             val appToLaunch = intent.action.toString()
-            if(ScrollingFragment.isValidPackage(appToLaunch)) launchPendingIntent(context, appToLaunch)
+            Log.i("Widget", appToLaunch)
+            launchPendingIntent(context, appToLaunch)
         }
     }
 
@@ -63,43 +64,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     val views = RemoteViews(context.packageName, R.layout.gesture_access_widget)
 
     val pref: String = loadPref(context, appWidgetId)
-    when(pref) {
-        context.resources.getString(R.string.left_name) -> {
-            //Andreas' test preferences
-            setupButton(context, views, R.id.button00, ScrollingFragment.TIDAL_PACKAGE)
-            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
-            setupButton(context, views, R.id.button02, ScrollingFragment.GMAIL_PACKAGE)
-            setupButton(context, views, R.id.button03, ScrollingFragment.AVANZA_PACKAGE)
-            setupButton(context, views, R.id.button10, ScrollingFragment.FIREFOX_PACKAGE)
-            setupButton(context, views, R.id.button11, ScrollingFragment.DISCORD_PACKAGE)
-            setupButton(context, views, R.id.button12, ScrollingFragment.SWISH_PACKAGE)
-            setupButton(context, views, R.id.button13, ScrollingFragment.MESSENGER_PACKAGE)
-            //setupButton(context, views, R.id.button03, ScrollingFragment.NAME_OF_PACKAGE)
-        }
-        context.resources.getString(R.string.right_name) -> {
-            //Gustav's test preferences
-            setupButton(context, views, R.id.button00, ScrollingFragment.FIREFOX_PACKAGE)
-            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
-            setupButton(context, views, R.id.button02, ScrollingFragment.GMAIL_PACKAGE)
-            setupButton(context, views, R.id.button03, ScrollingFragment.CANVAS_PACKAGE)
-            setupButton(context, views, R.id.button04, ScrollingFragment.MESSENGER_PACKAGE)
-            setupButton(context, views, R.id.button10, ScrollingFragment.NINEGAG_PACKAGE)
-            setupButton(context, views, R.id.button11, ScrollingFragment.DISCORD_PACKAGE)
-            setupButton(context, views, R.id.button12, ScrollingFragment.SWISH_PACKAGE)
-            setupButton(context, views, R.id.button13, ScrollingFragment.TELEGRAM_PACKAGE)
-            setupButton(context, views, R.id.button14, ScrollingFragment.PODCAST_ADDICT_PACKAGE)
-            setupButton(context, views, R.id.button20, ScrollingFragment.SPOTIFY_PACKAGE)
-            setupButton(context, views, R.id.button24, ScrollingFragment.FACEBOOK_PACKAGE)
-            //setupButton(context, views, R.id.button04, ScrollingFragment.NAME_OF_PACKAGE)
-        }
-        context.resources.getString(R.string.default_name) -> {
-            setupButton(context, views, R.id.button00, ScrollingFragment.CANVAS_PACKAGE)
-            setupButton(context, views, R.id.button01, ScrollingFragment.CHROME_PACKAGE)
-            setupButton(context, views, R.id.button32, ScrollingFragment.FACEBOOK_PACKAGE)
-            setupButton(context, views, R.id.button03, ScrollingFragment.GMAIL_PACKAGE)
-            setupButton(context, views, R.id.button44, ScrollingFragment.TWITTER_PACKAGE)
-        }
-    }
+    setupButton(context, views, R.id.button00, pref)
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)

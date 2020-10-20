@@ -21,7 +21,6 @@ class WidgetConfigFragment : Fragment(){
 
     private lateinit var binding: FragmentWidgetConfigBinding
     private val installedApps: MutableList<ExternalApp> = mutableListOf()
-    private var selectedApp: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_widget_config, container, false)
@@ -49,7 +48,18 @@ class WidgetConfigFragment : Fragment(){
         val adapter = ExternalAppRecyclerViewAdapter(
             ExternalAppRecyclerViewAdapter.ExternalAppListener { app ->
                 Log.d("Listener", "Selected app: ${app.packageName}")
-                selectedApp = app.packageName
+                // When the button is clicked, store the string locally
+                this.context?.let { it1 -> savePref(it1, appWidgetId, app.packageName) }
+
+                // It is the responsibility of the configuration activity to update the app widget
+                val appWidgetManager = AppWidgetManager.getInstance(this.context)
+                this.context?.let { it1 -> updateAppWidget(it1, appWidgetManager, appWidgetId) }
+
+                // Make sure we pass back the original appWidgetId
+                val resultValue = Intent()
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                this.activity?.setResult(Activity.RESULT_OK, resultValue)
+                this.activity?.finish()
             })
         adapter.submitList(installedApps)
         binding.externalAppList.adapter = adapter
@@ -110,7 +120,7 @@ internal fun savePref(context: Context, appWidgetId: Int, text: String) {
 internal fun loadPref(context: Context, appWidgetId: Int): String {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0)
     val prefValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return prefValue ?: context.getString(R.string.default_name)
+    return prefValue ?: ""
 }
 
 internal fun deletePref(context: Context, appWidgetId: Int) {

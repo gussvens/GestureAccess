@@ -27,47 +27,6 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     companion object{
         //Used by Widget to confirm it is the sender of the intent
         const val ACTION_WIDGET= "com.example.sensorapp.FROM_WIDGET"
-
-        // Package names for apps in prototype, should preferably
-        // be loaded in dynamically during runtime and be paired
-        // with app name and icon uri in a custom settings file generated on
-        // installation.
-        const val TWITTER_PACKAGE = "com.twitter.android"
-        const val FACEBOOK_PACKAGE = "com.facebook.katana"
-        const val CHROME_PACKAGE = "com.android.chrome"
-        const val GMAIL_PACKAGE = "com.google.android.gm"
-        const val CANVAS_PACKAGE = "com.instructure.candroid"
-        const val MESSENGER_PACKAGE = "com.facebook.orca"
-        const val TELEGRAM_PACKAGE = "org.telegram.messenger"
-        const val NINEGAG_PACKAGE = "com.ninegag.android.app"
-        const val SWISH_PACKAGE = "se.bankgirot.swish"
-        const val PODCAST_ADDICT_PACKAGE = "com.bambuna.podcastaddict"
-        const val SPOTIFY_PACKAGE = "com.spotify.music"
-        const val TIDAL_PACKAGE = "com.aspiro.tidal"
-        const val DISCORD_PACKAGE = "com.discord"
-        const val FIREFOX_PACKAGE = "org.mozilla.firefox"
-        const val AVANZA_PACKAGE = "se.avanzabank.androidapplikation"
-        //TODO: Add more daily apps to prototype before data collection starts
-
-        //Allows quick checking if the desired application is supported
-        private val VALID_PACKAGES = listOf(
-            FACEBOOK_PACKAGE,
-            CHROME_PACKAGE,
-            GMAIL_PACKAGE,
-            TWITTER_PACKAGE,
-            CANVAS_PACKAGE,
-            MESSENGER_PACKAGE,
-            TELEGRAM_PACKAGE,
-            NINEGAG_PACKAGE,
-            SWISH_PACKAGE,
-            PODCAST_ADDICT_PACKAGE,
-            SPOTIFY_PACKAGE,
-            TIDAL_PACKAGE,
-            DISCORD_PACKAGE,
-            FIREFOX_PACKAGE,
-            AVANZA_PACKAGE
-        )
-        fun isValidPackage(pkg: String): Boolean {return VALID_PACKAGES.contains(pkg)}
     }
 
     private lateinit var binding: FragmentMainBinding
@@ -76,10 +35,9 @@ class ScrollingFragment : Fragment(), SensorEventListener {
     // Actuator
     private lateinit var vibrator: Vibrator
 
-    // Sensors
+    // Sensor
     private lateinit var sensorManager: SensorManager
     private val accelerometerReading = FloatArray(3)
-    private var gyroReading = FloatArray(3)
 
     private var isLaunching: Boolean = false
     private var accumulatedWork: Int = 0
@@ -140,10 +98,8 @@ class ScrollingFragment : Fragment(), SensorEventListener {
         // Inspects where the Intent that launched/resumed the parent Activity comes from
         // If it comes from the Widget (ACTION_WIDGET) then try to launch the application indicated by the Widget
         if(this.activity?.intent?.action.equals(ACTION_WIDGET)) {
-            val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")
-            if(appToLaunch != null && isValidPackage(appToLaunch)) {
-                requestLaunch(appToLaunch)
-            }
+            val appToLaunch = this.activity?.intent?.getStringExtra("appToLaunch")?: ""
+            requestLaunch(appToLaunch)
         } else if(this.activity?.intent?.action.equals("android.intent.action.MAIN")) {
             teardown()
         }
