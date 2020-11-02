@@ -9,9 +9,11 @@
             name="gestureViewModel"
             type="com.example.sensorapp.GestureViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent">
 
         <ImageView
             android:id="@+id/app_icon"
@@ -32,6 +34,7 @@
             android:fontFamily="@font/montserrat"
             android:text="@{@string/gesture_format(gestureViewModel.gestureText)}"
             android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,6 +47,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/montserrat"
             android:text="@{@string/difficulty_format(gestureViewModel.difficulty.toString())}"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@+id/prompt_text"
             app:layout_constraintStart_toStartOf="@+id/prompt_text"
@@ -56,6 +60,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/montserrat"
             android:text="@{@string/progress_format(gestureViewModel.progress)}"
+            android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/difficulty_text"
             app:layout_constraintStart_toStartOf="@+id/difficulty_text"

@@ -2,24 +2,25 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorAccent"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/configure_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_margin="@dimen/text_margin"
             android:fontFamily="@font/montserrat"
             android:text="@string/app_select_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/colorPrimary"
+            android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="36sp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/external_app_list"

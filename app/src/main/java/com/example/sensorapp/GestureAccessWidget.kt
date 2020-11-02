@@ -65,9 +65,21 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
     val pref: String = loadPref(context, appWidgetId)
     setupButton(context, views, R.id.button00, pref)
+    setupLabel(context, views, R.id.label00, pref)
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
+}
+
+internal fun setupLabel(context: Context, views: RemoteViews, labelID: Int, appToLaunch: String){
+    // Get the application name or fallback to a default
+    with (getName(context, appToLaunch)) {
+        if (this == null) {
+            views.setTextViewText(labelID, "Default")
+        } else {
+            views.setTextViewText(labelID, this)
+        }
+    }
 }
 
 internal fun setupButton(context: Context, views: RemoteViews, buttonID: Int, appToLaunch: String){
@@ -79,6 +91,14 @@ internal fun setupButton(context: Context, views: RemoteViews, buttonID: Int, ap
             views.setImageViewBitmap(buttonID, this.toBitmap())
         }
     }
+
+    /*with (getName(context, appToLaunch)) {
+        if (this == null) {
+            views.setTextViewText(buttonID, "Default")
+        } else {
+            views.setTextViewText(buttonID, this)
+        }
+    }*/
 
     // Create intent and set click listener
     val intent = Intent(context, GestureAccessWidget::class.java)
@@ -100,4 +120,19 @@ internal fun getIcon(context: Context, packageName: String): Drawable? {
         Log.e(TAG, "Package name not found: ${nameException.message}")
     }
     return icon
+}
+
+/**
+ * Retrieves the default icon for an application based on a the package name as a Drawable,
+ * or returns null if the application/icon is not found
+ */
+internal fun getName(context: Context, packageName: String): String? {
+    var name: String? = null
+    try {
+        val packageManager = context?.packageManager
+        name = packageManager.getApplicationLabel( packageManager.getApplicationInfo(packageName, 0) ).toString()
+    } catch (nameException: PackageManager.NameNotFoundException) {
+        Log.e(TAG, "Package name not found: ${nameException.message}")
+    }
+    return name
 }
